@@ -9,8 +9,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
-
 public class MainActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +37,16 @@ public class MainActivity extends AppCompatActivity {
         final Player player= new Player();
         final Enemy enemy= new Enemy();
         Status.setText("Choose an action");
+        Status.setOnClickListener(new TextView.OnClickListener(){
+            public void onClick(View v){
+                Hp_Enemy.setProgress(100);
+                Hp_Player.setProgress(100);
+                Status.setText("Choose an action");
+                attack.setEnabled(true);
+                Status.setEnabled(false);
+            }
+        });
+        Status.setEnabled(false);
         attack.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 player.Attack();
@@ -44,26 +54,12 @@ public class MainActivity extends AppCompatActivity {
                 if(Hp_Enemy.getProgress() == 0){
                     Status.setText("You Win!!");
                     attack.setEnabled(false);
-                    Status.setOnClickListener(new TextView.OnClickListener(){
-                        public void onClick(View v){
-                            Hp_Enemy.setProgress(100);
-                            Hp_Player.setProgress(100);
-                            Status.setText("Choose an action");
-                            attack.setEnabled(true);
-                        }
-                    });
+                    Status.setEnabled(true);
                 }
                 if(Hp_Player.getProgress() == 0){
                     Status.setText("You lose! :(");
                     attack.setEnabled(false);
-                    Status.setOnClickListener(new TextView.OnClickListener() {
-                        public void onClick(View v) {
-                            Hp_Enemy.setProgress(100);
-                            Hp_Player.setProgress(100);
-                            Status.setText("Choose an action");
-                            attack.setEnabled(true);
-                        }
-                    });
+                    Status.setEnabled(true);
                 }
             }
         });
