@@ -28,6 +28,12 @@
         android:text="TextView"
         android:layout_weight="0.63" />
 
+    <TextView
+        android:id="@+id/goldAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gold: " />
+
     <ProgressBar
         android:id="@+id/Hp_Player"
         style="?android:attr/progressBarStyleHorizontal"
@@ -43,14 +49,9 @@
         android:text="Player" />
 
     <Button
-        android:id="@+id/defend"
+        android:id="@+id/magic"
         android:layout_width="match_parent"
         android:layout_height="69dp"
-        android:text="Defend" />
+        android:text="Magic" />
 
-    <Button
-        android:id="@+id/attack"
-        android:layout_width="match_parent"
-        android:layout_height="69dp"
-        android:text="Attack" />
 </LinearLayout>
