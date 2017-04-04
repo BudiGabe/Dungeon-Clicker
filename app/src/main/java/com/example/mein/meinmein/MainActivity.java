@@ -1,6 +1,7 @@
 package com.example.mein.meinmein;
 
 import android.os.Build;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         final TextView Status = (TextView) findViewById(R.id.Status);
         Button Magic = (Button) findViewById(R.id.magic);
         final TextView GoldAmount = (TextView) findViewById(R.id.goldAmount);
+        final Handler handler = new Handler();
         class Player {
             private int gold;
             public void SetGold(){
@@ -43,20 +45,48 @@ public class MainActivity extends AppCompatActivity {
                 Hp_Player.setProgress(hpPlayerCurrent - randomDmgEnemy);
             }
         }
-        final Player player= new Player();
-        final Enemy enemy= new Enemy();
+        class System {
+            private int enemyStatus;
+            public void enemyStop(){
+                handler.removeCallbacksAndMessages(null);
+                enemyStatus = 0;
+            }
+            public void enemyStart(){
+                enemyStatus = 1;
+            }
+            public int getHandlerStatus(){
+                return enemyStatus;
+            }
+        }
+        final Player player = new Player();
+        final Enemy enemy = new Enemy();
+        final System system = new System();
         Status.setText("Kill as many enemies before you die!");
         player.SetGold();
+        final Runnable handlerTask = new Runnable() {
+            @Override
+            public void run() {
+                if(Hp_Enemy.getProgress() != 0){
+                    enemy.Attack();
+                }
+                if(Hp_Player.getProgress() == 0){
+                    Status.setText("YOU DIED");
+                    system.enemyStop();
+                }
+                handler.postDelayed(this, 1000);
+            }
+        };
+        system.enemyStop();
         Status.setOnClickListener(new TextView.OnClickListener(){
             public void onClick(View v){
+                if(system.getHandlerStatus() == 0){
+                    handlerTask.run();
+                    system.enemyStart();
+                }
                 if((Hp_Enemy.getProgress() != 0) && (Hp_Player.getProgress() != 0)){
                     player.Attack();
-                    enemy.Attack();
-                    if(Hp_Player.getProgress() == 0){
-                        Status.setText("YOU DIED");
-                    }
                 } else {
-                    if(Hp_Enemy.getProgress()==0){
+                    if(Hp_Enemy.getProgress() == 0){
                         Hp_Enemy.setProgress(100);
                         player.GetGold();
                     }
@@ -70,5 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
     }
 }
