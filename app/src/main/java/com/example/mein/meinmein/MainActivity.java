@@ -21,14 +21,16 @@ public class MainActivity extends AppCompatActivity {
         final TextView Status = (TextView) findViewById(R.id.Status);
         Button Magic = (Button) findViewById(R.id.magic);
         final TextView GoldAmount = (TextView) findViewById(R.id.goldAmount);
+        final TextView ManaAmount = (TextView) findViewById(R.id.mana);
         final Handler handler = new Handler();
         class Player {
             private int gold;
+            private float mana;
             public void SetGold(){
                 gold=0;
-                GoldAmount.setText("Gold: " + gold);
+                GoldAmount.setText("Gold: 0");
             }
-            public void GetGold(){
+            public void ReceiveGold(){
                 gold += 10 + (int)(Math.random() * 21);
                 GoldAmount.setText("Gold: " + gold);
             }
@@ -37,6 +39,19 @@ public class MainActivity extends AppCompatActivity {
                 int randomDmgPlayer = 5 + (int)(Math.random() * 16);
                 Hp_Enemy.setProgress(hpEnemyCurrent - randomDmgPlayer);
             }
+            public void ReceiveMana(){
+                mana += 0.5;
+                ManaAmount.setText("Mana: " + (int)mana);
+            }
+            public void SetMana(){
+                mana = 0;
+                ManaAmount.setText("Mana: 0" );
+            }
+            public void SpendMana(int a){
+                mana -= a;
+                ManaAmount.setText("Mana: " + (int) mana);
+            }
+            public float GetMana(){return mana;}
         }
         final Player player = new Player();
         class Enemy {
@@ -73,11 +88,15 @@ public class MainActivity extends AppCompatActivity {
             public int getEnemyStatus(){
                 return enemyStatus;
             }
+            public void start(){
+                Status.setText("Kill as many enemies before you die!");
+                player.SetGold();
+                player.SetMana();
+                enemyStop();
+            }
         }
         final System system = new System();
-        Status.setText("Kill as many enemies before you die!");
-        player.SetGold();
-        system.enemyStop();
+        system.start();
         Status.setOnClickListener(new TextView.OnClickListener(){
             public void onClick(View v){
                 if(system.getEnemyStatus() == 0){
@@ -88,16 +107,27 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     if(Hp_Enemy.getProgress() == 0){
                         Hp_Enemy.setProgress(100);
-                        player.GetGold();
+                        player.ReceiveGold();
+                        player.ReceiveMana();
                     }
                     if(Hp_Player.getProgress() == 0){
                         Status.setText("Kill as many enemies before you die!");
                         Hp_Enemy.setProgress(100);
                         Hp_Player.setProgress(100);
                         player.SetGold();
-
+                        player.SetMana();
+                        system.enemyStop();
                     }
                 }
+            }
+        });
+        Magic.setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                if(player.GetMana() >= 5){
+                    Hp_Player.incrementProgressBy(50);
+                    player.SpendMana(5);
+                }
+
             }
         });
 

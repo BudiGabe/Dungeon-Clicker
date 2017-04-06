@@ -34,6 +34,12 @@
         android:layout_height="wrap_content"
         android:text="Gold: " />
 
+    <TextView
+        android:id="@+id/mana"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mana: " />
+
     <ProgressBar
         android:id="@+id/Hp_Player"
         style="?android:attr/progressBarStyleHorizontal"
