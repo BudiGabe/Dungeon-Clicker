@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         final Handler handler = new Handler();
         class Player {
             private int gold;
-            private float mana;
+            private int mana;
             public void SetGold(){
                 gold=0;
                 GoldAmount.setText("Gold: 0");
@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
                 Hp_Enemy.setProgress(hpEnemyCurrent - randomDmgPlayer);
             }
             public void ReceiveMana(){
-                mana += 0.5;
-                ManaAmount.setText("Mana: " + (int)mana);
+                mana += 1;
+                ManaAmount.setText("Mana: " + mana);
             }
             public void SetMana(){
                 mana = 0;
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             }
             public void SpendMana(int a){
                 mana -= a;
-                ManaAmount.setText("Mana: " + (int) mana);
+                ManaAmount.setText("Mana: " + mana);
             }
             public float GetMana(){return mana;}
         }
@@ -123,9 +123,9 @@ public class MainActivity extends AppCompatActivity {
         });
         Magic.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
-                if(player.GetMana() >= 5){
+                if(player.GetMana() >= 10){
                     Hp_Player.incrementProgressBy(50);
-                    player.SpendMana(5);
+                    player.SpendMana(10);
                 }
 
             }
