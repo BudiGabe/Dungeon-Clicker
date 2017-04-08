@@ -9,6 +9,11 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,13 +24,32 @@ public class MainActivity extends AppCompatActivity {
         final ProgressBar Hp_Enemy = (ProgressBar) findViewById(R.id.Hp_Enemy);
         final ProgressBar Hp_Player = (ProgressBar) findViewById(R.id.Hp_Player);
         final TextView Status = (TextView) findViewById(R.id.Status);
+        final TextView Hp = (TextView) findViewById(R.id.CurrentHp);
+        final TextView MinDmg = (TextView) findViewById(R.id.CurrentMinDmg);
+        final TextView MaxDmg = (TextView) findViewById(R.id.CurrentMaxDmg);
         Button Magic = (Button) findViewById(R.id.magic);
+        final Button AddMinDmg = (Button) findViewById(R.id.buttonMinDmg);
+        Button AddMaxDmg = (Button) findViewById(R.id.buttonMaxDmg);
+        Button AddMaxHp = (Button) findViewById(R.id.buttonHp);
         final TextView GoldAmount = (TextView) findViewById(R.id.goldAmount);
         final TextView ManaAmount = (TextView) findViewById(R.id.mana);
         final Handler handler = new Handler();
+        final Timer t = new Timer(false);
         class Player {
             private int gold;
             private int mana;
+            private int minDmg = 5;
+            private int maxDmg = 10;
+            public void AddMinDmg(int value){minDmg += value;}
+            public void AddMaxDmg(int value){maxDmg += value;}
+            public void AddMaxHp(int value){Hp_Player.setMax(Hp_Player.getMax() + value);}
+            public int GetMinDmg(){return minDmg;}
+            public int GetMaxDmg(){return maxDmg;}
+            public void Attack() {
+                int hpEnemyCurrent = Hp_Enemy.getProgress();
+                int randomDmgPlayer = minDmg + (int)(Math.random() * (maxDmg + 1));
+                Hp_Enemy.setProgress(hpEnemyCurrent - randomDmgPlayer);
+            }
             public void SetGold(){
                 gold=0;
                 GoldAmount.setText("Gold: 0");
@@ -34,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
                 gold += 10 + (int)(Math.random() * 21);
                 GoldAmount.setText("Gold: " + gold);
             }
-            public void Attack() {
-                int hpEnemyCurrent = Hp_Enemy.getProgress();
-                int randomDmgPlayer = 5 + (int)(Math.random() * 16);
-                Hp_Enemy.setProgress(hpEnemyCurrent - randomDmgPlayer);
+            public int GetGold(){return gold;}
+            public void SpendGold(int value){
+                gold -= value;
+                GoldAmount.setText("Gold: " + gold);
             }
             public void ReceiveMana(){
                 mana += 1;
@@ -47,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
                 mana = 0;
                 ManaAmount.setText("Mana: 0" );
             }
-            public void SpendMana(int a){
-                mana -= a;
+            public void SpendMana(int value){
+                mana -= value;
                 ManaAmount.setText("Mana: " + mana);
             }
             public float GetMana(){return mana;}
@@ -62,6 +86,33 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         final Enemy enemy = new Enemy();
+        class Shop{
+            private int priceHp = 100;
+            private int priceMinDmg = 100;
+            private int priceMaxDmg = 100;
+            public int getPriceHp(){return priceHp;}
+            public int getPriceMinDmg(){return priceMinDmg;}
+            public int getPriceMaxDmg(){return priceMaxDmg;}
+            public void buyHP(){
+                player.AddMaxHp(20);
+                player.SpendGold(priceHp);
+                priceHp += 50;
+                Hp.setText("HP: " + Hp_Player.getMax());
+            }
+            public void buyMaxDmg(){
+                player.AddMaxDmg(2);
+                player.SpendGold(priceMaxDmg);
+                priceMaxDmg += 50;
+                MaxDmg.setText("MaxDmg: " + player.GetMaxDmg());
+            }
+            public void buyMinDmg(){
+                player.AddMinDmg(2);
+                player.SpendGold(priceMinDmg);
+                priceMinDmg += 50;
+                MinDmg.setText("MinDmg: " + player.GetMinDmg());
+            }
+        }
+        final Shop shop = new Shop();
         class System {
             private int enemyStatus;
             private Runnable handlerTask = new Runnable() {
@@ -88,11 +139,42 @@ public class MainActivity extends AppCompatActivity {
             public int getEnemyStatus(){
                 return enemyStatus;
             }
+            public void warningGold(){
+                Status.setText("Not enough gold");
+                t.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Status.setText("Kill as many enemies before you die!");
+                            }
+                        });
+                    }
+                }, 2000);
+            }
+            public void warningMana(){
+                Status.setText("Not enough mana");
+                t.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Status.setText("Kill as many enemies before you die!");
+                            }
+                        });
+                    }
+                }, 2000);
+            }
             public void start(){
                 Status.setText("Kill as many enemies before you die!");
+                Hp.setText("HP: " + Hp_Player.getMax());
+                MinDmg.setText("MinDmg: " + player.GetMinDmg());
+                MaxDmg.setText("MaxDmg: " + player.GetMaxDmg());
                 player.SetGold();
                 player.SetMana();
+                AddMinDmg.setEnabled(false);
                 enemyStop();
+
             }
         }
         final System system = new System();
@@ -127,10 +209,45 @@ public class MainActivity extends AppCompatActivity {
                     Hp_Player.incrementProgressBy(50);
                     player.SpendMana(10);
                 }
+                else{
+                    system.warningMana();
+                }
+
 
             }
         });
-
+        AddMaxHp.setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v) {
+                if(player.GetGold() >= shop.getPriceHp()){
+                    shop.buyHP();
+                }else{
+                    system.warningGold();
+                }
+            }
+        });
+        AddMaxDmg.setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v) {
+                if(player.GetGold() >= shop.getPriceMaxDmg()){
+                    shop.buyMaxDmg();
+                }else{
+                    system.warningGold();
+                }
+                if(player.GetMaxDmg() > player.GetMinDmg() + 5)
+                    AddMinDmg.setEnabled(true);
+            }
+        });
+        AddMinDmg.setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v) {
+                if(player.GetGold() >= shop.getPriceMinDmg()){
+                   shop.buyMinDmg();
+                }else{
+                    system.warningGold();
+                }
+                if(player.GetMinDmg() > player.GetMaxDmg() - 5){
+                    AddMinDmg.setEnabled(false);
+                }
+            }
+        });
 
     }
 }
