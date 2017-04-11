@@ -48,7 +48,7 @@
         android:id="@+id/Status"
         android:layout_width="348dp"
         android:layout_height="293dp"
-        android:text="TextView"
+        android:text="@string/instructions"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
@@ -121,7 +121,7 @@
         android:layout_marginBottom="-9dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:text="Increase Min Dmg"
+        android:text="@string/MinDmg"
         app:layout_constraintBottom_toTopOf="@+id/magic"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@+id/magic"
@@ -134,7 +134,7 @@
         android:layout_marginBottom="0dp"
         android:layout_marginLeft="96dp"
         android:layout_marginRight="8dp"
-        android:text="Increase Max Hp"
+        android:text="@string/MaxHp"
         app:layout_constraintBottom_toTopOf="@+id/magic"
         app:layout_constraintHorizontal_bias="0.17"
         app:layout_constraintLeft_toLeftOf="@+id/magic"
@@ -147,7 +147,7 @@
         android:layout_marginBottom="0dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:text="Increase Max Dmg"
+        android:text="Max Dmg"
         app:layout_constraintBottom_toTopOf="@+id/magic"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="@+id/magic"
@@ -171,7 +171,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="140dp"
-        android:layout_marginLeft="256dp"
+        android:layout_marginLeft="250dp"
         android:text="Hp: "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
@@ -186,7 +186,7 @@
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.562"
+        app:layout_constraintHorizontal_bias="0.537"
         android:layout_marginBottom="140dp" />
 
 </android.support.constraint.ConstraintLayout>

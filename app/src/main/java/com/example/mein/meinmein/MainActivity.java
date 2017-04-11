@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
         final TextView MaxDmg = (TextView) findViewById(R.id.CurrentMaxDmg);
         Button Magic = (Button) findViewById(R.id.magic);
         final Button AddMinDmg = (Button) findViewById(R.id.buttonMinDmg);
-        Button AddMaxDmg = (Button) findViewById(R.id.buttonMaxDmg);
-        Button AddMaxHp = (Button) findViewById(R.id.buttonHp);
+        final Button AddMaxDmg = (Button) findViewById(R.id.buttonMaxDmg);
+        final Button AddMaxHp = (Button) findViewById(R.id.buttonHp);
         final TextView GoldAmount = (TextView) findViewById(R.id.goldAmount);
         final TextView ManaAmount = (TextView) findViewById(R.id.mana);
         final Handler handler = new Handler();
@@ -76,14 +76,39 @@ public class MainActivity extends AppCompatActivity {
                 ManaAmount.setText("Mana: " + mana);
             }
             public float GetMana(){return mana;}
+            public void reset() {
+                Hp_Player.setProgress(100);
+                Hp_Player.setMax(100);
+                SetGold();
+                SetMana();
+                minDmg = 5;
+                maxDmg = 10;
+                Hp.setText("Hp: " + Hp_Player.getMax());
+                MaxDmg.setText("MaxDmg: " + GetMaxDmg());
+                MinDmg.setText("MinDmg: " + GetMinDmg());
+            }
         }
         final Player player = new Player();
         class Enemy {
+            private int minDmg = 1;
+            private int maxDmg = 5;
             public void Attack() {
                 int hpPlayerCurrent = Hp_Player.getProgress();
-                int randomDmgEnemy = 1 + (int) (Math.random() * 6);
+                int randomDmgEnemy = minDmg + (int) (Math.random() * (maxDmg + 1));
                 Hp_Player.setProgress(hpPlayerCurrent - randomDmgEnemy);
             }
+            public void evolve() {
+                minDmg++;
+                maxDmg++;
+                Hp_Enemy.setMax(Hp_Enemy.getMax() + 10);
+            }
+            public void reset() {
+                Hp_Enemy.setProgress(100);
+                Hp_Enemy.setMax(100);
+                minDmg = 1;
+                maxDmg = 5;
+            }
+
         }
         final Enemy enemy = new Enemy();
         class Shop{
@@ -97,19 +122,22 @@ public class MainActivity extends AppCompatActivity {
                 player.AddMaxHp(20);
                 player.SpendGold(priceHp);
                 priceHp += 50;
-                Hp.setText("HP: " + Hp_Player.getMax());
+                Hp.setText("Hp: " + Hp_Player.getMax());
+                AddMaxHp.setText("Max Hp\n" + getPriceHp());
             }
             public void buyMaxDmg(){
                 player.AddMaxDmg(2);
                 player.SpendGold(priceMaxDmg);
                 priceMaxDmg += 50;
                 MaxDmg.setText("MaxDmg: " + player.GetMaxDmg());
+                AddMaxDmg.setText("Max Dmg\n" + getPriceMaxDmg());
             }
             public void buyMinDmg(){
                 player.AddMinDmg(2);
                 player.SpendGold(priceMinDmg);
                 priceMinDmg += 50;
                 MinDmg.setText("MinDmg: " + player.GetMinDmg());
+                AddMinDmg.setText("Min Dmg\n" + getPriceMinDmg());
             }
         }
         final Shop shop = new Shop();
@@ -146,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         runOnUiThread(new Runnable() {
                             public void run() {
-                                Status.setText("Kill as many enemies before you die!");
+                                Status.setText(R.string.instructions);
                             }
                         });
                     }
@@ -159,17 +187,20 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         runOnUiThread(new Runnable() {
                             public void run() {
-                                Status.setText("Kill as many enemies before you die!");
+                                Status.setText(R.string.instructions);
                             }
                         });
                     }
                 }, 2000);
             }
             public void start(){
-                Status.setText("Kill as many enemies before you die!");
+                Status.setText(R.string.instructions);
                 Hp.setText("HP: " + Hp_Player.getMax());
                 MinDmg.setText("MinDmg: " + player.GetMinDmg());
                 MaxDmg.setText("MaxDmg: " + player.GetMaxDmg());
+                AddMaxHp.setText("Max Hp\n" + shop.getPriceHp());
+                AddMaxDmg.setText("Max Dmg\n" + shop.getPriceMaxDmg());
+                AddMinDmg.setText("Min Dmg\n" + shop.getPriceMinDmg());
                 player.SetGold();
                 player.SetMana();
                 AddMinDmg.setEnabled(false);
@@ -189,15 +220,14 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     if(Hp_Enemy.getProgress() == 0){
                         Hp_Enemy.setProgress(100);
+                        //enemy.evolve();
                         player.ReceiveGold();
                         player.ReceiveMana();
                     }
                     if(Hp_Player.getProgress() == 0){
-                        Status.setText("Kill as many enemies before you die!");
-                        Hp_Enemy.setProgress(100);
-                        Hp_Player.setProgress(100);
-                        player.SetGold();
-                        player.SetMana();
+                        Status.setText(R.string.instructions);
+                        enemy.reset();
+                        player.reset();
                         system.enemyStop();
                     }
                 }
