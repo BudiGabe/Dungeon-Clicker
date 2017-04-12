@@ -2,7 +2,7 @@
     <string name="app_name">Mein Gaem</string>
     <string name="instructions">"Kill as many enemies before you die!
         Tap to attack!
-        Enemy evolves after each death!
+        Enemy evolves after 10 deaths!
         Magic heals you and it costs 10 mana!
         You can buy upgrades below!"</string>
     <string name="MinDmg">"Min Dmg"</string>
