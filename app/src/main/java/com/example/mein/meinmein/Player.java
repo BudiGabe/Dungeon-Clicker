@@ -1,6 +1,5 @@
 package com.example.mein.meinmein;
 
-import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -10,6 +9,7 @@ import android.widget.TextView;
 
 public class Player {
     ProgressBar Hp_Player;
+    ProgressBar Hp_Enemy;
     TextView Armor;
     TextView MinDmg;
     TextView MaxDmg;
@@ -24,8 +24,8 @@ public class Player {
     private int armor;
     private int kills;
     private int income;
-    private int mitigation;
     public Player(ProgressBar Hp_Player,
+                  ProgressBar Hp_Enemy,
                   TextView Armor,
                   TextView MinDmg,
                   TextView MaxDmg,
@@ -34,6 +34,7 @@ public class Player {
                   TextView GoldAmount,
                   TextView Income){
         this.Hp_Player = Hp_Player;
+        this.Hp_Enemy = Hp_Enemy;
         this.Armor = Armor;
         this.MinDmg = MinDmg;
         this.MaxDmg = MaxDmg;
@@ -47,8 +48,6 @@ public class Player {
     public void addMaxDmg(int value){maxDmg += value;}
     public void addArmor(){armor++;}
     public void addIncome(){income += 20;}
-    public void addMitigation(){mitigation++;}
-    public void resetMitigation(){mitigation = 0;}
     public void addKills(){
         kills++;
         KillCount.setText("Kills: " + kills);
@@ -65,12 +64,13 @@ public class Player {
     public int getMaxDmg(){return maxDmg;}
     public int getArmor() {return armor;}
     public int getHp(){return Hp_Player.getProgress();}
-
+    public void resetHp(){Hp_Player.setProgress(100);}
     public int getKills() {return kills;}
     public int getIncome(){return income;}
-    public void attack(MainActivity.Enemy enemy) {
+    public void damage(int value){Hp_Player.setProgress(getHp() - value);}
+    public void attack(Enemy enemy) {
         int randomDmgPlayer = minDmg + (int)(Math.random() * (maxDmg + 1));
-        int dmgPlayer = randomDmgPlayer - mitigation;
+        int dmgPlayer = randomDmgPlayer - enemy.getArmor();
         if(dmgPlayer < 0){
             dmgPlayer = 0;
         }
@@ -103,7 +103,7 @@ public class Player {
     }
     public float getMana(){return mana;}
     public void reset() {
-        Hp_Player.setProgress(100);
+        resetHp();
         setGold();
         setMana();
         resetKills();

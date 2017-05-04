@@ -8,18 +8,19 @@ import android.widget.TextView;
  */
 
 public class Status implements View.OnClickListener {
-    MainActivity.Enemy enemy;
+    Enemy enemy;
     Player player;
-    MainActivity.System system;
-    MainActivity.Shop shop;
+    System system;
+    Shop shop;
     TextView Status;
-    public Status(MainActivity.Enemy enemy, Player player, MainActivity.System system, MainActivity.Shop shop, TextView Status){
+    public Status(Enemy enemy, Player player, System system, Shop shop, TextView Status){
         this.enemy = enemy;
         this.shop = shop;
         this.player = player;
         this.system = system;
         this.Status = Status;
     }
+
     @Override
     public void onClick(View v) {
         if(system.getEnemyStatus() == 0){
@@ -41,7 +42,7 @@ public class Status implements View.OnClickListener {
                 Status.setText(R.string.instructions);
                 enemy.reset();
                 player.reset();
-                shop.reset();
+                shop.reset(player);
                 system.enemyStop();
             }
         }
