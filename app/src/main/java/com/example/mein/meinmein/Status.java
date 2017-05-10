@@ -12,14 +12,16 @@ public class Status implements View.OnClickListener {
     Player player;
     System system;
     Shop shop;
-    TextView Status;
-    public Status(Enemy enemy, Player player, System system, Shop shop, TextView Status){
+    TextView statusText;
+    public Status(Enemy enemy, Player player, System system, Shop shop, TextView statusText){
         this.enemy = enemy;
         this.shop = shop;
         this.player = player;
         this.system = system;
-        this.Status = Status;
+        this.statusText = statusText;
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -39,7 +41,7 @@ public class Status implements View.OnClickListener {
                 player.receiveMana();
             }
             if(player.getHp() == 0){
-                Status.setText(R.string.instructions);
+                statusText.setText(R.string.instructions);
                 enemy.reset();
                 player.reset();
                 shop.reset(player);

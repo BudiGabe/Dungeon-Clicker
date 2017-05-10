@@ -1,5 +1,6 @@
 package com.example.mein.meinmein;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,6 +22,11 @@ public class System {
     TextView Income;
     Button AddIncome;
     Handler handler;
+    Player player;
+    Enemy enemy;
+    TextView statusText;
+    Shop shop;
+    Activity MainActivity;
     final Timer t = new Timer(false);
     private int enemyStatus;
     private Runnable handlerTask = new Runnable(){
@@ -31,7 +37,7 @@ public class System {
                 enemy.attack(player);
             }
             if(player.getHp() == 0){
-                Status.setText("YOU DIED");
+                statusText.setText("YOU DIED");
                 enemyStop();
             }
             handler.postDelayed(this, 2000);
@@ -45,7 +51,13 @@ public class System {
                   Button addMinDmg,
                   TextView Income,
                   Button AddIncome,
-                  Handler handler){
+                  final Handler handler,
+                  final Player player,
+                  final Enemy enemy,
+                  final TextView statusText,
+                  Shop shop,
+                  Activity MainActivity){
+        super();
         this.Armor = Armor;
         this.AddArmor = AddArmor;
         this.MaxDmg = MaxDmg;
@@ -55,7 +67,13 @@ public class System {
         this.Income = Income;
         this.AddIncome = AddIncome;
         this.handler = handler;
+        this.player = player;
+        this.enemy = enemy;
+        this.statusText = statusText;
+        this.shop = shop;
+        this.MainActivity = MainActivity;
     }
+
     public void enemyStop(){
         handler.removeCallbacksAndMessages(null);
         enemyStatus = 0;
@@ -68,33 +86,33 @@ public class System {
         return enemyStatus;
     }
     public void warningGold(){
-        Status.setText("Not enough gold");
+        statusText.setText("Not enough gold");
         t.schedule(new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(new Runnable() {
+                MainActivity.runOnUiThread(new Runnable() {
                     public void run() {
-                        Status.setText(R.string.instructions);
+                        statusText.setText(R.string.instructions);
                     }
                 });
             }
         }, 2000);
     }
     public void warningMana(){
-        Status.setText("Not enough mana");
+        statusText.setText("Not enough mana");
         t.schedule(new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(new Runnable() {
+                MainActivity.runOnUiThread(new Runnable() {
                     public void run() {
-                        Status.setText(R.string.instructions);
+                        statusText.setText(R.string.instructions);
                     }
                 });
             }
         }, 2000);
     }
-    public void start(Player player, Shop shop){
-        Status.setText(R.string.instructions);
+    public void start(){
+        statusText.setText(R.string.instructions);
         Armor.setText("Armor: " + player.getArmor());
         MinDmg.setText("MinDmg: " + player.getMinDmg());
         MaxDmg.setText("MaxDmg: " + player.getMaxDmg());

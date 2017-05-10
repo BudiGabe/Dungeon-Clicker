@@ -9,14 +9,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 
 public class MainActivity extends AppCompatActivity {
     ProgressBar Hp_Enemy;
     ProgressBar Hp_Player;
-    TextView Status;
+    TextView statusText;
     TextView Armor;
     TextView MinDmg;
     TextView MaxDmg;
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Hp_Enemy = (ProgressBar) findViewById(R.id.Hp_Enemy);
         Hp_Player = (ProgressBar) findViewById(R.id.Hp_Player);
-        Status = (TextView) findViewById(R.id.Status);
+        statusText = (TextView) findViewById(R.id.Status);
         Armor = (TextView) findViewById(R.id.Armor);
         MinDmg = (TextView) findViewById(R.id.CurrentMinDmg);
         MaxDmg = (TextView) findViewById(R.id.CurrentMaxDmg);
@@ -75,21 +74,26 @@ public class MainActivity extends AppCompatActivity {
                 Income,
                 AddIncome);
         system = new System( Armor,
-        AddArmor,
-        MaxDmg,
-        addMaxDmg,
-        MinDmg,
-        addMinDmg,
-        Income,
-        AddIncome,
-        handler);
+                AddArmor,
+                MaxDmg,
+                addMaxDmg,
+                MinDmg,
+                addMinDmg,
+                Income,
+                AddIncome,
+                handler,
+                player,
+                enemy,
+                statusText,
+                shop,
+                this);
         status = new Status( enemy,
                 player,
                 system,
                 shop,
-                Status);
+                statusText);
         system.start();
-        Status.setOnClickListener(new Status(enemy, player, system, shop, Status));
+        statusText.setOnClickListener(new Status(enemy, player, system, shop, statusText));
         Magic.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 if(player.getMana() >= 10){
@@ -128,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     system.warningGold();
                 }
-                if(player.getMinDmg() > player.getMaxDmg() - 5){
+                if(player.getMinDmg() > player.getMaxDmg() - 7){
                     addMinDmg.setEnabled(false);
                 }
             }
