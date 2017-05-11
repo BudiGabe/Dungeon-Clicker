@@ -20,9 +20,6 @@ public class Status implements View.OnClickListener {
         this.system = system;
         this.statusText = statusText;
     }
-
-
-
     @Override
     public void onClick(View v) {
         if(system.getEnemyStatus() == 0){
@@ -39,6 +36,7 @@ public class Status implements View.OnClickListener {
                 player.addKills();
                 player.receiveGold();
                 player.receiveMana();
+                player.receiveXp(enemy);
             }
             if(player.getHp() == 0){
                 statusText.setText(R.string.instructions);

@@ -29,8 +29,7 @@ public class System {
     Activity MainActivity;
     final Timer t = new Timer(false);
     private int enemyStatus;
-    private Runnable handlerTask = new Runnable(){
-
+    private Runnable handlerTask = new Runnable(){ // stuff to control enemy attack per second
         @Override
         public void run() {
             if(enemy.getHp() != 0){
@@ -40,7 +39,7 @@ public class System {
                 statusText.setText("YOU DIED");
                 enemyStop();
             }
-            handler.postDelayed(this, 2000);
+            handler.postDelayed(this, 2000); //interval for attacks
         }
     };
     public System(TextView Armor,
@@ -57,7 +56,7 @@ public class System {
                   final TextView statusText,
                   Shop shop,
                   Activity MainActivity){
-        super();
+        super(); //call Object class, stuff to use MainActivity in class
         this.Armor = Armor;
         this.AddArmor = AddArmor;
         this.MaxDmg = MaxDmg;
@@ -87,12 +86,12 @@ public class System {
     }
     public void warningGold(){
         statusText.setText("Not enough gold");
-        t.schedule(new TimerTask() {
+        t.schedule(new TimerTask() { //just a timer
             @Override
             public void run() {
                 MainActivity.runOnUiThread(new Runnable() {
                     public void run() {
-                        statusText.setText(R.string.instructions);
+                        statusText.setText(R.string.instructions); // used to go back to default instructions after 2 secs
                     }
                 });
             }

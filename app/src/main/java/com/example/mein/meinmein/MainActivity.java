@@ -15,12 +15,14 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
     ProgressBar Hp_Enemy;
     ProgressBar Hp_Player;
+    ProgressBar expBar;
     TextView statusText;
     TextView Armor;
     TextView MinDmg;
     TextView MaxDmg;
     TextView KillCount;
     TextView Income;
+    TextView currLvl;
     Player player;
     Enemy enemy;
     Handler handler;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Hp_Enemy = (ProgressBar) findViewById(R.id.Hp_Enemy);
         Hp_Player = (ProgressBar) findViewById(R.id.Hp_Player);
+        expBar = (ProgressBar) findViewById(R.id.expBar);
         statusText = (TextView) findViewById(R.id.Status);
         Armor = (TextView) findViewById(R.id.Armor);
         MinDmg = (TextView) findViewById(R.id.CurrentMinDmg);
@@ -53,16 +56,19 @@ public class MainActivity extends AppCompatActivity {
         AddIncome = (Button) findViewById(R.id.buttonIncome);
         GoldAmount = (TextView) findViewById(R.id.goldAmount);
         ManaAmount = (TextView) findViewById(R.id.mana);
+        currLvl = (TextView) findViewById(R.id.lvl);
         handler = new Handler();
         player = new Player( Hp_Player,
                 Hp_Enemy,
+                expBar,
                 Armor,
                 MinDmg,
                 MaxDmg,
                 KillCount,
                 ManaAmount,
                 GoldAmount,
-                Income);
+                Income,
+                currLvl);
         enemy = new Enemy(Hp_Enemy,
                 Hp_Player);
         shop = new Shop(Armor,

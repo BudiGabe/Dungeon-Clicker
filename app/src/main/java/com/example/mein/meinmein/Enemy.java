@@ -12,6 +12,8 @@ public class Enemy {
     private int minDmg = 1;
     private int maxDmg = 5;
     private int armor;
+    private int xpPerKill = 20;
+    private int lvl = 1;
     public Enemy(ProgressBar Hp_Enemy,
                  ProgressBar Hp_Player){
         this.Hp_Enemy = Hp_Enemy;
@@ -29,15 +31,20 @@ public class Enemy {
         }
        player.damage(dmgEnemy);
     }
+    public int getXpPerKill(){return xpPerKill;}
     public void evolve() {
+        lvl++;
         minDmg++;
         maxDmg++;
         armor++;
+        xpPerKill += lvl*5;
     }
     public void reset() {
         resetHp();
         minDmg = 1;
         maxDmg = 5;
         armor = 0;
+        xpPerKill = 20;
+        lvl = 1;
     }
 }
