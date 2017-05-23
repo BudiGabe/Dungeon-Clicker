@@ -12,7 +12,7 @@ public class Enemy {
     private int minDmg = 1;
     private int maxDmg = 5;
     private int armor;
-    private int xpPerKill = 20;
+    private int xpPerKill = 10;
     private int lvl = 1;
     public Enemy(ProgressBar Hp_Enemy,
                  ProgressBar Hp_Player){
@@ -44,7 +44,7 @@ public class Enemy {
         minDmg = 1;
         maxDmg = 5;
         armor = 0;
-        xpPerKill = 20;
+        xpPerKill = 10;
         lvl = 1;
     }
 }

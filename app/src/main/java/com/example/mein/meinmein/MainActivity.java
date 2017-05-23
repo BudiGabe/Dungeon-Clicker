@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     Enemy enemy;
     Handler handler;
     Shop shop;
+    Upgrade upgrade;
     Status status;
     System system;
     Button addMinDmg;
@@ -68,17 +69,21 @@ public class MainActivity extends AppCompatActivity {
                 ManaAmount,
                 GoldAmount,
                 Income,
-                currLvl);
+                currLvl,
+                upgrade);
         enemy = new Enemy(Hp_Enemy,
                 Hp_Player);
-        shop = new Shop(Armor,
+        shop = new Shop();
+        upgrade = new Upgrade(Armor,
                 AddArmor,
                 MaxDmg,
                 addMaxDmg,
                 MinDmg,
                 addMinDmg,
                 Income,
-                AddIncome);
+                AddIncome,
+                player,
+                system);
         system = new System( Armor,
                 AddArmor,
                 MaxDmg,
@@ -91,15 +96,15 @@ public class MainActivity extends AppCompatActivity {
                 player,
                 enemy,
                 statusText,
-                shop,
+                upgrade,
                 this);
         status = new Status( enemy,
                 player,
                 system,
-                shop,
+                upgrade,
                 statusText);
         system.start();
-        statusText.setOnClickListener(new Status(enemy, player, system, shop, statusText));
+        statusText.setOnClickListener(new Status(enemy, player, system, upgrade, statusText));
         Magic.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 if(player.getMana() >= 10){
@@ -113,42 +118,33 @@ public class MainActivity extends AppCompatActivity {
         });
         AddArmor.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v) {
-                if(player.getGold() >= shop.getPriceArmor()){
-                    shop.buyArmor(player);
-                }else{
-                    system.warningGold();
+                upgrade.upArmor();
+                if(player.getPoints() == 0){
+                    upgrade.disable();
                 }
             }
         });
         addMaxDmg.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v) {
-                if(player.getGold() >= shop.getPriceMaxDmg()){
-                    shop.buyMaxDmg(player);
-                }else{
-                    system.warningGold();
+                upgrade.upMaxDmg();
+                if(player.getPoints() == 0){
+                    upgrade.disable();
                 }
-                if(player.getMaxDmg() > player.getMinDmg() + 5)
-                    addMinDmg.setEnabled(true);
             }
         });
         addMinDmg.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v) {
-                if(player.getGold() >= shop.getPriceMinDmg()){
-                   shop.buyMinDmg(player);
-                }else{
-                    system.warningGold();
-                }
-                if(player.getMinDmg() > player.getMaxDmg() - 7){
-                    addMinDmg.setEnabled(false);
+                upgrade.upMinDmg();
+                if(player.getPoints() == 0){
+                    upgrade.disable();
                 }
             }
         });
         AddIncome.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
-                if(player.getGold() >= shop.getPriceIncome()){
-                    shop.buyIncome(player);
-                }else {
-                    system.warningGold();
+                upgrade.upIncome();
+                if(player.getPoints() == 0){
+                    upgrade.disable();
                 }
             }
         });

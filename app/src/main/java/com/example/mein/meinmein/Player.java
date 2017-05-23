@@ -1,5 +1,6 @@
 package com.example.mein.meinmein;
 
+
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -21,6 +22,8 @@ public class Player {
     TextView GoldAmount;
     TextView Income;
     TextView currLvl;
+    Upgrade upgrade;
+
     private int gold;
     private int mana;
     private int minDmg = 5;
@@ -40,7 +43,8 @@ public class Player {
                   TextView ManaAmount,
                   TextView GoldAmount,
                   TextView Income,
-                  TextView currLvl){
+                  TextView currLvl,
+                  Upgrade upgrade){
         this.Hp_Player = Hp_Player;
         this.Hp_Enemy = Hp_Enemy;
         this.expBar = expBar;
@@ -52,7 +56,7 @@ public class Player {
         this.GoldAmount = GoldAmount;
         this.Income = Income;
         this.currLvl = currLvl;
-
+        this.upgrade = upgrade;
     }
     public void addMinDmg(int value){minDmg += value;}
     public void addMaxDmg(int value){maxDmg += value;}
@@ -99,6 +103,8 @@ public class Player {
         gold -= value;
         GoldAmount.setText("Gold: " + gold);
     }
+    public int getPoints(){return upgradePoints;}
+    public void spendPoints(){upgradePoints--;}
     public void receiveMana(){
         mana += 1;
         ManaAmount.setText("Mana: " + mana);
@@ -122,24 +128,43 @@ public class Player {
         expBar.setProgress(0);
         expBar.setMax(100);
     }
-    public void lvlUp(){
-        expBar.setProgress(0);
-        lvl++;
-        expBar.setMax(expBar.getMax() + lvl*10);
-        upgradePoints++;
-        currLvl.setText("" + lvl);
-    }
+
     public void resetLvl(){
         lvl = 1;
         currLvl.setText("1");
     }
-    public void receiveXp(Enemy enemy){
-        int xpTillLvl = getMaxXp() - getXp();
-        if(enemy.getXpPerKill() >= xpTillLvl){
-            lvlUp();
-            int remainingXp = enemy.getXpPerKill() - xpTillLvl;
-            expBar.setProgress(getXp() + remainingXp);
-        }else {expBar.setProgress(getXp() + enemy.getXpPerKill());}
+    private int xpTillLvl = getMaxXp() - getXp();
+    public void lvlUpAfterKill(Enemy enemy){
+        lvl++;
+        expBar.setMax(getMaxXp() + lvl*10);
+        addRemainingXp(enemy);
+        upgradePoints++;
+        currLvl.setText("" + lvl);
+        upgrade.enable();
+    }
+    public void receiveXpAfterKill(Enemy enemy){ //WHY DO I GET x2 XP #FirstWorldProblem
+        expBar.setProgress(getXp() + enemy.getXpPerKill());
+    }
+    public boolean shouldLvlAfterKill(Enemy enemy){
+        return enemy.getXpPerKill() >= xpTillLvl;
+    }
+    public void addRemainingXp(Enemy enemy){
+        int remainingXp = enemy.getXpPerKill() - xpTillLvl;
+        expBar.setProgress(remainingXp);
+    }
+    public void kill(Enemy enemy){
+        enemy.resetHp();
+        if(getKills() % 10 == 0){
+            enemy.evolve();
+        }
+        addKills();
+        receiveGold();
+        receiveMana();
+        if(shouldLvlAfterKill(enemy)){
+            lvlUpAfterKill(enemy);
+        }else{
+            receiveXpAfterKill(enemy);
+        }
     }
 
     public void reset() {

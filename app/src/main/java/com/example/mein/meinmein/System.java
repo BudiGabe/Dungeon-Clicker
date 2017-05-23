@@ -25,7 +25,7 @@ public class System {
     Player player;
     Enemy enemy;
     TextView statusText;
-    Shop shop;
+    Upgrade upgrade;
     Activity MainActivity;
     final Timer t = new Timer(false);
     private int enemyStatus;
@@ -54,7 +54,7 @@ public class System {
                   final Player player,
                   final Enemy enemy,
                   final TextView statusText,
-                  Shop shop,
+                  Upgrade upgrade,
                   Activity MainActivity){
         super(); //call Object class, stuff to use MainActivity in class
         this.Armor = Armor;
@@ -69,7 +69,7 @@ public class System {
         this.player = player;
         this.enemy = enemy;
         this.statusText = statusText;
-        this.shop = shop;
+        this.upgrade = upgrade;
         this.MainActivity = MainActivity;
     }
 
@@ -115,15 +115,11 @@ public class System {
         Armor.setText("Armor: " + player.getArmor());
         MinDmg.setText("MinDmg: " + player.getMinDmg());
         MaxDmg.setText("MaxDmg: " + player.getMaxDmg());
-        AddArmor.setText("Armor\n" + shop.getPriceArmor());
-        addMaxDmg.setText("Max Dmg\n" + shop.getPriceMaxDmg());
-        addMinDmg.setText("Min Dmg\n" + shop.getPriceMinDmg());
-        AddIncome.setText("Income\n" + shop.getPriceIncome());
         player.setGold();
         player.setMana();
         player.resetKills();
         player.resetIncome();
-        addMinDmg.setEnabled(false);
+        upgrade.disable();
         enemyStop();
 
     }

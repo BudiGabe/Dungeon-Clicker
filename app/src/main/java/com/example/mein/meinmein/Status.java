@@ -11,13 +11,17 @@ public class Status implements View.OnClickListener {
     Enemy enemy;
     Player player;
     System system;
-    Shop shop;
+    Upgrade upgrade;
     TextView statusText;
-    public Status(Enemy enemy, Player player, System system, Shop shop, TextView statusText){
+    public Status(Enemy enemy,
+                  Player player,
+                  System system,
+                  Upgrade upgrade,
+                  TextView statusText){
         this.enemy = enemy;
-        this.shop = shop;
         this.player = player;
         this.system = system;
+        this.upgrade = upgrade;
         this.statusText = statusText;
     }
     @Override
@@ -29,20 +33,13 @@ public class Status implements View.OnClickListener {
             player.attack(enemy);
         } else {
             if(enemy.getHp() == 0){
-                enemy.resetHp();
-                if(player.getKills() % 10 == 0){
-                    enemy.evolve();
-                }
-                player.addKills();
-                player.receiveGold();
-                player.receiveMana();
-                player.receiveXp(enemy);
+                player.kill(enemy);
             }
             if(player.getHp() == 0){
                 statusText.setText(R.string.instructions);
                 enemy.reset();
                 player.reset();
-                shop.reset(player);
+                upgrade.reset();
                 system.enemyStop();
             }
         }
