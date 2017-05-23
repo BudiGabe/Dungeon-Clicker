@@ -16,9 +16,8 @@ public class System {
     TextView Armor;
     Button AddArmor;
     TextView MaxDmg;
-    Button addMaxDmg;
+    Button addDmg;
     TextView MinDmg;
-    Button addMinDmg;
     TextView Income;
     Button AddIncome;
     Handler handler;
@@ -45,9 +44,8 @@ public class System {
     public System(TextView Armor,
                   Button AddArmor,
                   TextView MaxDmg,
-                  Button addMaxDmg,
+                  Button addDmg,
                   TextView MinDmg,
-                  Button addMinDmg,
                   TextView Income,
                   Button AddIncome,
                   final Handler handler,
@@ -60,9 +58,8 @@ public class System {
         this.Armor = Armor;
         this.AddArmor = AddArmor;
         this.MaxDmg = MaxDmg;
-        this.addMaxDmg = addMaxDmg;
+        this.addDmg = addDmg;
         this.MinDmg = MinDmg;
-        this.addMinDmg = addMinDmg;
         this.Income = Income;
         this.AddIncome = AddIncome;
         this.handler = handler;

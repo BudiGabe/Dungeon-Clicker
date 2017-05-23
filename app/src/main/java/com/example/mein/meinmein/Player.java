@@ -1,6 +1,5 @@
 package com.example.mein.meinmein;
 
-
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -23,7 +22,7 @@ public class Player {
     TextView Income;
     TextView currLvl;
     Upgrade upgrade;
-
+    private int xpTillLvl;
     private int gold;
     private int mana;
     private int minDmg = 5;
@@ -57,9 +56,12 @@ public class Player {
         this.Income = Income;
         this.currLvl = currLvl;
         this.upgrade = upgrade;
+        xpTillLvl = getMaxXp() - getXp();
     }
-    public void addMinDmg(int value){minDmg += value;}
-    public void addMaxDmg(int value){maxDmg += value;}
+    public void addDmg(int value){
+        maxDmg += value;
+        minDmg += value;
+    }
     public void addArmor(){armor++;}
     public void addIncome(){income += 20;}
     public void addKills(){
@@ -133,24 +135,26 @@ public class Player {
         lvl = 1;
         currLvl.setText("1");
     }
-    private int xpTillLvl = getMaxXp() - getXp();
+    public void refreshXpTillLvl(){xpTillLvl = getMaxXp() - getXp(); }
+    public void addRemainingXp(Enemy enemy){
+        int remainingXp = enemy.getXpPerKill() - xpTillLvl;
+        expBar.setProgress(remainingXp);
+    }
     public void lvlUpAfterKill(Enemy enemy){
         lvl++;
         expBar.setMax(getMaxXp() + lvl*10);
         addRemainingXp(enemy);
+        refreshXpTillLvl();
         upgradePoints++;
         currLvl.setText("" + lvl);
         upgrade.enable();
     }
     public void receiveXpAfterKill(Enemy enemy){ //WHY DO I GET x2 XP #FirstWorldProblem
         expBar.setProgress(getXp() + enemy.getXpPerKill());
+        refreshXpTillLvl();
     }
     public boolean shouldLvlAfterKill(Enemy enemy){
         return enemy.getXpPerKill() >= xpTillLvl;
-    }
-    public void addRemainingXp(Enemy enemy){
-        int remainingXp = enemy.getXpPerKill() - xpTillLvl;
-        expBar.setProgress(remainingXp);
     }
     public void kill(Enemy enemy){
         enemy.resetHp();

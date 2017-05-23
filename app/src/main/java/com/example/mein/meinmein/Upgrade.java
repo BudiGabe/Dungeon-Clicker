@@ -1,6 +1,5 @@
 package com.example.mein.meinmein;
 
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -12,51 +11,41 @@ public class Upgrade {
     TextView Armor;
     Button AddArmor;
     TextView MaxDmg;
-    Button addMaxDmg;
+    Button addDmg;
     TextView MinDmg;
-    Button addMinDmg;
     TextView Income;
     Button AddIncome;
     Player player;
-    System system;
     public Upgrade(TextView Armor,
                 Button AddArmor,
                 TextView MaxDmg,
-                Button addMaxDmg,
+                Button addDmg,
                 TextView MinDmg,
-                Button addMinDmg,
                 TextView Income,
-                Button AddIncome,
-                   Player player,
-                   System system){
+                Button AddIncome){
         this.Armor = Armor;
         this.AddArmor = AddArmor;
         this.MaxDmg = MaxDmg;
-        this.addMaxDmg = addMaxDmg;
+        this.addDmg = addDmg;
         this.MinDmg = MinDmg;
-        this.addMinDmg = addMinDmg;
         this.Income = Income;
         this.AddIncome = AddIncome;
-        this.player = player;
-        this.system = system;
     }
 
-    public void upArmor(){
+    public void upArmor(Player player){
         player.addArmor();
         player.spendPoints();
         Armor.setText("Armor: " + player.getArmor());
     }
-    public void upMaxDmg(){
-        player.addMaxDmg(2);
+    public void upDmg(Player player){
+        player.addDmg(2);
         player.spendPoints();
         MaxDmg.setText("MaxDmg: " + player.getMaxDmg());
-    }
-    public void upMinDmg(){
-        player.addMinDmg(2);
-        player.spendPoints();
         MinDmg.setText("MinDmg: " + player.getMinDmg());
+
     }
-    public void upIncome(){
+
+    public void upIncome(Player player){
         player.addIncome();
         player.spendPoints();
         Income.setText("Income: " + player.getIncome());
@@ -69,14 +58,12 @@ public class Upgrade {
 
     }
     public void disable(){
-        addMinDmg.setEnabled(false);
-        addMaxDmg.setEnabled(false);
+        addDmg.setEnabled(false);
         AddArmor.setEnabled(false);
         AddIncome.setEnabled(false);
     }
     public void enable(){
-        addMinDmg.setEnabled(true);
-        addMaxDmg.setEnabled(true);
+        addDmg.setEnabled(true);
         AddArmor.setEnabled(true);
         AddIncome.setEnabled(true);
     }

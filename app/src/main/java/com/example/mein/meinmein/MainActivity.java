@@ -30,8 +30,7 @@ public class MainActivity extends AppCompatActivity {
     Upgrade upgrade;
     Status status;
     System system;
-    Button addMinDmg;
-    Button addMaxDmg;
+    Button addDmg;
     Button AddArmor;
     Button Magic;
     Button AddIncome;
@@ -51,15 +50,21 @@ public class MainActivity extends AppCompatActivity {
         KillCount = (TextView) findViewById(R.id.KillCount);
         Income = (TextView) findViewById(R.id.Income) ;
         Magic = (Button) findViewById(R.id.magic);
-        addMinDmg = (Button) findViewById(R.id.buttonMinDmg);
-        addMaxDmg = (Button) findViewById(R.id.buttonMaxDmg);
+        addDmg = (Button) findViewById(R.id.buttonDmg);
         AddArmor = (Button) findViewById(R.id.buttonArmor);
         AddIncome = (Button) findViewById(R.id.buttonIncome);
         GoldAmount = (TextView) findViewById(R.id.goldAmount);
         ManaAmount = (TextView) findViewById(R.id.mana);
         currLvl = (TextView) findViewById(R.id.lvl);
         handler = new Handler();
-        player = new Player( Hp_Player,
+        upgrade = new Upgrade(Armor,
+                AddArmor,
+                MaxDmg,
+                addDmg,
+                MinDmg,
+                Income,
+                AddIncome);
+        player = new Player(Hp_Player,
                 Hp_Enemy,
                 expBar,
                 Armor,
@@ -74,22 +79,11 @@ public class MainActivity extends AppCompatActivity {
         enemy = new Enemy(Hp_Enemy,
                 Hp_Player);
         shop = new Shop();
-        upgrade = new Upgrade(Armor,
-                AddArmor,
-                MaxDmg,
-                addMaxDmg,
-                MinDmg,
-                addMinDmg,
-                Income,
-                AddIncome,
-                player,
-                system);
         system = new System( Armor,
                 AddArmor,
                 MaxDmg,
-                addMaxDmg,
+                addDmg,
                 MinDmg,
-                addMinDmg,
                 Income,
                 AddIncome,
                 handler,
@@ -118,31 +112,24 @@ public class MainActivity extends AppCompatActivity {
         });
         AddArmor.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v) {
-                upgrade.upArmor();
+                upgrade.upArmor(player);
                 if(player.getPoints() == 0){
                     upgrade.disable();
                 }
             }
         });
-        addMaxDmg.setOnClickListener(new Button.OnClickListener(){
+        addDmg.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v) {
-                upgrade.upMaxDmg();
+                upgrade.upDmg(player);
                 if(player.getPoints() == 0){
                     upgrade.disable();
                 }
             }
         });
-        addMinDmg.setOnClickListener(new Button.OnClickListener(){
-            public void onClick(View v) {
-                upgrade.upMinDmg();
-                if(player.getPoints() == 0){
-                    upgrade.disable();
-                }
-            }
-        });
+
         AddIncome.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
-                upgrade.upIncome();
+                upgrade.upIncome(player);
                 if(player.getPoints() == 0){
                     upgrade.disable();
                 }
