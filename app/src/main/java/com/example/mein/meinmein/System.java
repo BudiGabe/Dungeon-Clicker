@@ -1,6 +1,7 @@
 package com.example.mein.meinmein;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Handler;
 import android.widget.Button;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ public class System {
     TextView statusText;
     Upgrade upgrade;
     Activity MainActivity;
+    Button magic;
     final Timer t = new Timer(false);
     private int enemyStatus;
     private Runnable handlerTask = new Runnable(){ // stuff to control enemy attack per second
@@ -53,7 +55,8 @@ public class System {
                   final Enemy enemy,
                   final TextView statusText,
                   Upgrade upgrade,
-                  Activity MainActivity){
+                  Activity MainActivity,
+                  Button magic){
         super(); //call Object class, stuff to use MainActivity in class
         this.Armor = Armor;
         this.AddArmor = AddArmor;
@@ -68,6 +71,7 @@ public class System {
         this.statusText = statusText;
         this.upgrade = upgrade;
         this.MainActivity = MainActivity;
+        this.magic = magic;
     }
 
     public void enemyStop(){
@@ -106,6 +110,14 @@ public class System {
                 });
             }
         }, 2000);
+    }
+    public boolean shoppingTime(){
+        if(player.getKills() % 10 == 0)
+            return true;
+        else return false;
+    }
+    public void startShop(){
+
     }
     public void start(){
         statusText.setText(R.string.instructions);

@@ -34,6 +34,9 @@ public class Status implements View.OnClickListener {
         } else {
             if(enemy.getHp() == 0){
                 player.kill(enemy);
+                if(system.shoppingTime()){
+                    system.startShop();
+                }
             }
             if(player.getHp() == 0){
                 statusText.setText(R.string.instructions);

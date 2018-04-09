@@ -33,7 +33,7 @@ public class Upgrade {
     }
 
     public void upArmor(Player player){
-        player.addArmor();
+        player.addArmor(1);
         player.spendPoints();
         Armor.setText("Armor: " + player.getArmor());
     }
@@ -46,7 +46,7 @@ public class Upgrade {
     }
 
     public void upIncome(Player player){
-        player.addIncome();
+        player.addIncome(20);
         player.spendPoints();
         Income.setText("Income: " + player.getIncome());
     }

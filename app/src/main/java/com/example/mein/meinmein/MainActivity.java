@@ -8,10 +8,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-
-
-
-
 public class MainActivity extends AppCompatActivity {
     ProgressBar Hp_Enemy;
     ProgressBar Hp_Player;
@@ -32,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     System system;
     Button addDmg;
     Button AddArmor;
-    Button Magic;
+    Button magic;
     Button AddIncome;
     TextView GoldAmount;
     TextView ManaAmount;
@@ -49,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         MaxDmg = (TextView) findViewById(R.id.CurrentMaxDmg);
         KillCount = (TextView) findViewById(R.id.KillCount);
         Income = (TextView) findViewById(R.id.Income) ;
-        Magic = (Button) findViewById(R.id.magic);
+        magic = (Button) findViewById(R.id.magic);
         addDmg = (Button) findViewById(R.id.buttonDmg);
         AddArmor = (Button) findViewById(R.id.buttonArmor);
         AddIncome = (Button) findViewById(R.id.buttonIncome);
@@ -91,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
                 enemy,
                 statusText,
                 upgrade,
-                this);
+                this,
+                magic);
         status = new Status( enemy,
                 player,
                 system,
@@ -99,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 statusText);
         system.start();
         statusText.setOnClickListener(new Status(enemy, player, system, upgrade, statusText));
-        Magic.setOnClickListener(new Button.OnClickListener(){
+        magic.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 if(player.getMana() >= 10){
                     Hp_Player.incrementProgressBy(50);
@@ -135,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
 
     }
 }

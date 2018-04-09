@@ -32,6 +32,8 @@ public class Player {
     private int income;
     private int upgradePoints;
     private int lvl = 1;
+    private int leech;
+    private int dmgPlayer;
     public Player(ProgressBar Hp_Player,
                   ProgressBar Hp_Enemy,
                   ProgressBar expBar,
@@ -62,8 +64,8 @@ public class Player {
         maxDmg += value;
         minDmg += value;
     }
-    public void addArmor(){armor++;}
-    public void addIncome(){income += 20;}
+    public void addArmor(int value){armor += value;}
+    public void addIncome(int value){income += value;}
     public void addKills(){
         kills++;
         KillCount.setText("Kills: " + kills);
@@ -80,18 +82,24 @@ public class Player {
     public int getMaxDmg(){return maxDmg;}
     public int getArmor() {return armor;}
     public int getHp(){return Hp_Player.getProgress();}
+    public void recoverHp(int value){Hp_Player.incrementProgressBy(value);}
     public void resetHp(){Hp_Player.setProgress(100);}
     public int getKills() {return kills;}
     public int getIncome(){return income;}
     public void damage(int value){Hp_Player.setProgress(getHp() - value);}
-    public void attack(Enemy enemy) {
+    public void calculateDmgDealtTo(Enemy enemy){
         int randomDmgPlayer = minDmg + (int)(Math.random() * (maxDmg + 1));
-        int dmgPlayer = randomDmgPlayer - enemy.getArmor();
+        dmgPlayer = randomDmgPlayer - enemy.getArmor();
         if(dmgPlayer < 0){
             dmgPlayer = 0;
         }
-        enemy.damage(dmgPlayer);
     }
+    public void attack(Enemy enemy) {
+        calculateDmgDealtTo(enemy);
+        enemy.damage(dmgPlayer);
+        if(leech > 0){Hp_Player.incrementProgressBy(leech);}
+    }
+    public void addLeech(int valueOfLeech){leech += dmgPlayer*(valueOfLeech/100);}
     public void setGold(){
         gold=0;
         GoldAmount.setText("Gold: 0");
@@ -101,7 +109,7 @@ public class Player {
         GoldAmount.setText("Gold: " + gold);
     }
     public int getGold(){return gold;}
-    public void SpendGold(int value){
+    public void spendGold(int value){
         gold -= value;
         GoldAmount.setText("Gold: " + gold);
     }
